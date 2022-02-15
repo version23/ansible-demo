@@ -13,6 +13,7 @@
           - curl
           - gnupg
           - lsb-release
+          - python3-pip
         update_cache: true
         cache_valid_time: 86400
 
@@ -32,19 +33,18 @@
         update-cache: true
         filename: docker
 
-    - name: Установка docker-ce
+    - name: Установка docker-ce и проверка установки.
       apt:
-        name:
+        name: "{{ packages }}"
+        state: present
+        update-cache: true
+      vars:
+        packages:
           - docker-ce
           - docker-ce-cli
           - containerd.io
-        update-cache: true
-
-    - name: Проверка установки Docker
-      service:
-        name: docker
-        state: restarted
-        enabled: true
+      notify:
+        - docker status
   become: true
 
 - name: Установка Docker-compose
@@ -60,6 +60,12 @@
         dest: /usr/local/bin/docker-compose
         mode: 0755
   become: true
+
+- name: Настройка доп.пакетов python
+  block:
+    - name: pip пакеты
+      pip:
+        name: docker
 
 - name: Завершение установки.
   block:
