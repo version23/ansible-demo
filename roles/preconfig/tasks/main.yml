@@ -43,8 +43,11 @@
           - docker-ce
           - docker-ce-cli
           - containerd.io
-      notify:
-        - docker status
+    - name: Проверка что Docker установлен и перезагружен
+      service:
+        name: docker
+        state: restarted
+        enabled: true
   become: true
 
 - name: Установка Docker-compose
