@@ -4,7 +4,7 @@
     name: "{{ networkName }}"
     driver: overlay
 
-- name: Выкладка сервисов
+- name: Выкладка новых сервисов
   include: "../services/{{ item }}/service.yml"
   vars:
     name: "{{ item }}"
