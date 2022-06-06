@@ -10,7 +10,7 @@
       image: "{{ registry_name }}/{{ name }}:{{ version }}"
       state: present
       networks:
-        - name: "{{ network_name }}"
+        - name: "{{ networkName }}"
       publish:
         - mode: ingress
           protocol: tcp
