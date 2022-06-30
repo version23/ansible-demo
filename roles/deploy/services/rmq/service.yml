@@ -1,22 +1,14 @@
 ---
-- name: "[{{ name }}] кофнигурация secret"
-  include: "../secret.yml"
-
-- name: "*** [{{ name }}] Выкладка сервиса ***"
+- name: "[{{ name }}] Выкладка сервиса"
   block:
-  - name: "[{{ name }}] выкладка сервиса"
-    community.docker.docker_swarm_service:
-      name: "{{ name }}"
-      image: "{{ registry_name }}/{{ name }}:{{ version }}"
-      state: present
-      networks:
-        - name: "{{ networkName }}"
-      publish:
-        - mode: ingress
-          protocol: tcp
-          published_port: 3002
-          target_port: 3000
-      secrets:
-        - secret_name: "{{ name }}.env"
-          filename: "/opt/app/.env"
+    - name: "[{{ name }}] Выкладываем сервис"
+      community.docker.docker_swarm_service:
+        name: "{{ name }}"
+        image: "rabbitmq:{{ version }}"
+        state: present
+        networks:
+          - name: "{{ network_name }}"
+        env:
+          - RABBITMQ_DEFAULT_USER={{ rmq.user }}
+          - RABBITMQ_DEFAULT_PASS={{ rmq.password }}
   tags: "{{ name }}"
